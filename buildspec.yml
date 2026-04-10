@@ -3,14 +3,22 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Starting build..."
+      - yum install -y openssh-clients
+      - mkdir -p ~/.ssh
+      - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+      - chmod 600 ~/.ssh/id_rsa
+      
   build:
     commands:
       - echo "Building Docker image..."
       - docker build -t flask-app ./app
+      
   post_build:
     commands:
-      - echo "Build completed successfully"
+      - echo "Deploying to EC2..."
+      - scp -o StrictHostKeyChecking=no deploy-remote.sh ec2-user@$EC2_IP:/home/ec2-user/
+      - ssh -o StrictHostKeyChecking=no ec2-user@$EC2_IP "bash /home/ec2-user/deploy-remote.sh"
+      - echo "Done!"
 
 artifacts:
   files:
