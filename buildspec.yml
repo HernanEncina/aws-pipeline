@@ -7,7 +7,7 @@ phases:
   post_build:
     commands:
       - echo "Subiendo a S3"
-      - aws s3 cp --recursive ./app s3://app-flask/
+      - aws s3 cp --recursive ./app s3://app-flask-s3/
 artifacts:
   files:
     - '**/*'
