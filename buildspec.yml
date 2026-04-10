@@ -1,18 +1,13 @@
 version: 0.2
-
 phases:
-  pre_build:
-    commands:
-      - echo "Fase 1: Preparando entorno"
   build:
     commands:
-      - echo "Fase 2: Construyendo imagen Docker"
+      - echo "Construyendo imagen"
       - docker build -t flask-app ./app
-      - echo "Build completado con exito"
   post_build:
     commands:
-      - echo "Fase 3: Pipeline finalizada correctamente"
-
+      - echo "Subiendo a S3"
+      - aws s3 cp --recursive ./app s3://app-flask/
 artifacts:
   files:
     - '**/*'
