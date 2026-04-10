@@ -3,19 +3,17 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Source stage: Código descargado"
-      
+      - echo "Source stage: Codigo descargado"
   build:
     commands:
       - echo "Build stage: Construyendo imagen"
       - docker build -t flask-app ./app
       - echo "Build successful"
-      
   post_build:
     commands:
       - echo "Deploy stage: Subiendo artifacts a S3"
-      - aws s3 cp --recursive ./app s3://app-flask/flask-app/
-      - echo "Pipeline completed - 3 stages green"
+      - aws s3 cp --recursive ./app s3://TU-BUCKET/flask-app/
+      - echo "Pipeline completed"
 
 artifacts:
   files:
