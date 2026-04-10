@@ -6,4 +6,4 @@ phases:
   build:
     commands:
       - echo "Build docker"
-      - docker build -t flask-app ./app
+      - docker build -t flask-app ./docker_aws-main/app
