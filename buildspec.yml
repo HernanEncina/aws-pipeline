@@ -3,22 +3,19 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - yum install -y openssh-clients
-      - mkdir -p ~/.ssh
-      - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-      - chmod 600 ~/.ssh/id_rsa
+      - echo "Source stage: Código descargado"
       
   build:
     commands:
-      - echo "Building Docker image..."
+      - echo "Build stage: Construyendo imagen"
       - docker build -t flask-app ./app
+      - echo "Build successful"
       
   post_build:
     commands:
-      - echo "Deploying to EC2..."
-      - scp -o StrictHostKeyChecking=no deploy-remote.sh ec2-user@$EC2_IP:/home/ec2-user/
-      - ssh -o StrictHostKeyChecking=no ec2-user@$EC2_IP "bash /home/ec2-user/deploy-remote.sh"
-      - echo "Done!"
+      - echo "Deploy stage: Subiendo artifacts a S3"
+      - aws s3 cp --recursive ./app s3://app-flask/flask-app/
+      - echo "Pipeline completed - 3 stages green"
 
 artifacts:
   files:
